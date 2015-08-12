@@ -3,8 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MainCameraController : MonoBehaviour {
-	
-	private List<GameObject> backgrounds = new List<GameObject>();
+
+    /// <summary>
+    /// 人，在此中引用，主要是方便调用
+    /// </summary>
+    private GameObject runner = null;
+
+    /// <summary>
+    /// 狗，在此中引用，主要是方便调用
+    /// </summary>
+    private GameObject dog = null;
+
+
+    private List<GameObject> backgrounds = new List<GameObject>();
 	private List<GameObject> obstacles = new List<GameObject>();
 	/// <summary>
 	/// 障碍物可用的Sprite列表，当生成障碍物时，从此列表中选取Sprite。
@@ -35,24 +46,41 @@ public class MainCameraController : MonoBehaviour {
 	/// </summary>
 	public float yObstaclesBottom = -1.5f;
 
-	// Use this for initialization
-	void Start () {
+
+    /// <summary>
+    /// 判断人追上狗的距离
+    /// </summary>
+    public float distanceCathUp = 0.2f;
+
+    /// <summary>
+    /// 狗离障碍物多远时需要起跳。
+    /// 其它狗的起跳速度和高度应结合障碍物的高度和宽度，但目前暂时简单处理
+    /// </summary>
+    public float distanceDogToJump = 2.0f;
+
+    void Start () {
 		
 		heightCam = 2.0f * Camera.main.orthographicSize;
 		widthCam = heightCam * Camera.main.aspect;
 		//float backgroundWidth = 
 		Debug.Log(string.Format("camWidth: {0} ; camHeight: {1} ", widthCam, heightCam));
-		
-		InitBackgrounds();
+
+        runner = GameObject.Find("runner");
+        dog = GameObject.Find("dog");
+
+        InitBackgrounds();
 		InitObstacles();
 	}
 	
-	// Update is called once per frame
 	void Update () 
 	{		
 		UpdateBackgrounds();
 		UpdateObstacles();
-	}
+
+        CheckDogToJump();
+
+        CheckCatchUp();
+    }
 
 
 	/// <summary>
@@ -170,8 +198,9 @@ public class MainCameraController : MonoBehaviour {
 	/// </summary>
 	void UpdateObstacles()
 	{
-		//简化，由于视角一直往右边移动，所以只判断最左边的墙是否超出可见范围。
-		int i=0;
+        //简化，由于视角一直往右边移动，所以只判断最左边的墙是否超出可见范围。
+        //目前obstacles只是简单的只包含一个障碍物
+        int i =0;
 		{
 			Vector3 obstPos = obstacles[i].transform.position;
 			if(IsObstacleLeftOutside_X(obstacles[i]))
@@ -194,6 +223,11 @@ public class MainCameraController : MonoBehaviour {
 		}
 	}
 
+    /// <summary>
+    /// 判断障碍物是否移动到了屏幕左边之外了
+    /// </summary>
+    /// <param name="obstacle"></param>
+    /// <returns></returns>
 	bool IsObstacleLeftOutside_X(GameObject obstacle)
 	{
 		Vector3 pos = obstacle.transform.position;
@@ -206,6 +240,61 @@ public class MainCameraController : MonoBehaviour {
 		}
 		return false;
 	}
+
+    /// <summary>
+    /// 判断狗是否需要起跳以躲避障碍
+    /// </summary>
+    /// <returns></returns>
+    bool CheckDogToJump()
+    {
+        Vector3 posDog = dog.transform.position;
+
+        foreach (GameObject obstacle in obstacles)
+        {
+            Vector3 posObst = obstacle.transform.position;
+
+            if (posObst.x > posDog.x && posObst.x - posDog.x < distanceDogToJump)
+            {
+                dog.SendMessage("ReadyToJump");
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 判断是否人追上狗
+    /// </summary>
+    void CheckCatchUp()
+    {
+        Vector3 posRunner = runner.transform.position;
+        Vector3 posDog = dog.transform.position;
+
+        //Debug.Log(string.Format("posRunner: {0},{1} ", posRunner.x, posRunner.y, posRunner.z));
+
+        float distance = posDog.x - posRunner.x;
+        if(distance < distanceCathUp)
+        {
+            Debug.Log(string.Format("Caught Up. Distance: {0}", distance));
+            OnCaughtUp();
+        }
+    }
+
+    /// <summary>
+    /// 当人追上狗后的处理接口
+    /// </summary>
+    void OnCaughtUp()
+    {
+        State.IsCaughtUp = true;
+                
+        //do sth here...
+
+    }
+
+
+
 }
 
 

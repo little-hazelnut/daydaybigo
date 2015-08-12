@@ -37,17 +37,22 @@ public class RunnerController : MonoBehaviour {
 	/// </summary>
 	private bool isJumpping = false;
 
-	/// <summary>
-	/// runner在地面上的时候的y值,
-	/// </summary>
-	private static float yOnGround = -1.5f;
+    /// <summary>
+    /// 每一次起跳时人的速度的增加量
+    /// </summary>
+    public float speedUpEachJump = 0.2f;
+
+    /// <summary>
+    /// runner在地面上的时候的y值,
+    /// </summary>
+    public static float yOnGround = -1.5f;
 
 	// Use this for initialization
 	void Start () {
 		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
 		speedX = speedInitX;
-
+        
 	}
 	
 	// Update is called once per frame
@@ -92,6 +97,12 @@ public class RunnerController : MonoBehaviour {
 	/// </summary>
 	void UpdatePosition()
 	{
+        if(State.IsCaughtUp)
+        {
+            //若处于追到狗的状态，暂时先停止跑，待交互处理
+            return;
+        }
+
 		float x = CalculateX();
 		float y = yOnGround;
 
@@ -106,7 +117,7 @@ public class RunnerController : MonoBehaviour {
 				speedY = 0f;
 				isJumpping=false;
 
-				speedX += 0.5f;
+				speedX += speedUpEachJump;
 			}
 		}
 
@@ -136,10 +147,21 @@ public class RunnerController : MonoBehaviour {
 		return transform.position.y + speedY * Time.deltaTime;
 	}
 
+    /// <summary>
+    /// 当人发生碰撞时的处理函数；
+    /// 注意是OnCollisionEnter2D， 不是OnCollisionEnter；同时，参数是Collision2D，不是Collision
+    /// </summary>
+    /// <param name="collision"></param>
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log(string.Format("on Runner Collider Collision ... "));
 
-	
+        //当碰撞时，暂时先是处理为速度恢复为初始速度；
+        //待添加上重力感应功能后再另行处理
+        speedX = speedInitX;
 
-
+    }
+    
 
 
 }

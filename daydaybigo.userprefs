@@ -1,11 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\DogController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\MainCameraController.cs">
     <Files>
-      <File FileName="Assets\RunnerController.cs" Line="115" Column="7" />
-      <File FileName="Assets\Settings.cs" Line="1" Column="1" />
-      <File FileName="Assets\DogController.cs" Line="100" Column="3" />
-      <File FileName="Assets\MainCameraController.cs" Line="169" Column="13" />
+      <File FileName="Assets\scripts\MainCameraController.cs" Line="209" Column="2" />
+      <File FileName="..\ddbg\daydaybigo\Assets\scripts\MainCameraController.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\DogController.cs" Line="7" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

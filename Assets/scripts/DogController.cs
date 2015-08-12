@@ -40,8 +40,7 @@ public class DogController : MonoBehaviour {
 	/// runner在地面上的时候的y值,
 	/// </summary>
 	private static float yOnGround = -2.0f;
-
-	// Use this for initialization
+    
 	void Start () {		
 		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
@@ -49,7 +48,6 @@ public class DogController : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
 	void Update () {		
 		//更新sprite
 		int index = (int)(Time.timeSinceLevelLoad * framesPerSecond);
@@ -65,8 +63,14 @@ public class DogController : MonoBehaviour {
 	/// 更新位置
 	/// </summary>
 	void UpdatePosition()
-	{
-		float x = CalculateX();
+    {
+        if (State.IsCaughtUp)
+        {
+            //若处于追到狗的状态，暂时先停止跑，待交互处理
+            return;
+        }
+
+        float x = CalculateX();
 		float y = yOnGround;
 		
 		//如果正处于跳起状态,则需要重新计算y坐标
@@ -107,6 +111,24 @@ public class DogController : MonoBehaviour {
 		speedY = speedY + gravityAcc * Time.deltaTime;
 		return transform.position.y + speedY * Time.deltaTime;
 	}
+    
+
+    /// <summary>
+    /// 起跳处理
+    /// </summary>
+    void ReadyToJump()
+    {
+        //如果已经是跳起状态，不作处理
+        if (isJumpping)
+        {
+            return;
+        }
+
+        speedY = speedJumpUp;
+        isJumpping = true;
+    }
+
+    
 
 
 }
