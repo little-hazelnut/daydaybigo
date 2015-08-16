@@ -12,4 +12,20 @@
 
 
 1、背景变化，春夏秋冬随速度而变化。   春夏秋冬过渡？
-2、
+
+
+
+by Schelling 2015.08.15 15:23
+1、待固定横竖方向？
+
+
+by Schelling 2015.08.16 22:40
+8.15~16两日工作内容：
+1. 主体实现障碍物及障碍物组合的生成功能；
+2. 添加了Settings静态类，用于统一维护游戏中相对稳定的设置，如摄像机跟随人还是狗、障碍物高度等设置；
+3. 添加了ObstacleCombination类，作为障碍物组合类，控制组合中各障碍物的类型、距离等及其生成；调试时，可以在Settings.InitObstacleCombinations()中设置不同的障碍物组合
+4. 添加了DifficultyLevel枚举，表示游戏难度，分别为低、中、难；
+5. 添加了ObstacleType枚举，对应策划给出的不同的障碍物类型；
+6. 在MainCameraController中有比较大的改动；
+7. 修改了各个Controller中有Update()函数为FixedUpdate()，实现以固定时间更新物体动作等，具体见注释说明。
+8. 人修改为连跳

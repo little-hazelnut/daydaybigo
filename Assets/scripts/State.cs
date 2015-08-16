@@ -24,7 +24,5 @@ public class State {
     /// </summary>
     public static int NumDogsCaught = 0;
 
-
-
-
+    
 }

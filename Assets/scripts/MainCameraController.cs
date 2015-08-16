@@ -17,6 +17,9 @@ public class MainCameraController : MonoBehaviour {
 
     private List<GameObject> backgrounds = new List<GameObject>();
 	private List<GameObject> obstacles = new List<GameObject>();
+
+    private List<ObstacleCombination> obstacleCombinations = new List<ObstacleCombination>(); 
+
 	/// <summary>
 	/// 障碍物可用的Sprite列表，当生成障碍物时，从此列表中选取Sprite。
 	/// </summary>
@@ -58,10 +61,35 @@ public class MainCameraController : MonoBehaviour {
     /// </summary>
     public float distanceDogToJump = 2.0f;
 
+    /// <summary>
+    /// 最新出现的障碍物组合
+    /// </summary>
+    private ObstacleCombination lastCombination = null;
+
+    /// <summary>
+    /// 相邻障碍物组合的距离，距离在此基础上会有一个小的随机浮动
+    /// </summary>
+    public float distanceEachCombination = 8;
+
+    /// <summary>
+    /// 低难度障碍物组合出现的概率
+    /// </summary>
+    public float probabilityLow = 0.5f;
+    /// <summary>
+    /// 中难度障碍物组合出现的概率
+    /// </summary>
+    public float probabilityMedium = 0.5f;
+    /// <summary>
+    /// 高难度障碍物组合出现的概率
+    /// </summary>
+    public float probabilityHigh = 0.25f;
+
+
+
     void Start () {
-		
-		heightCam = 2.0f * Camera.main.orthographicSize;
-		widthCam = heightCam * Camera.main.aspect;
+
+        heightCam = Settings.HeightCamera;// 2.0f * Camera.main.orthographicSize;
+        widthCam = Settings.WidthCamera;// heightCam * Camera.main.aspect;
 		//float backgroundWidth = 
 		Debug.Log(string.Format("camWidth: {0} ; camHeight: {1} ", widthCam, heightCam));
 
@@ -69,24 +97,37 @@ public class MainCameraController : MonoBehaviour {
         dog = GameObject.Find("dog");
 
         InitBackgrounds();
-		InitObstacles();
-	}
-	
-	void Update () 
+        
+        InitObstacles();
+    }
+
+    /// <summary>
+    /// 之前原为Update()
+    /// Update()是每帧画面更新时调用；FixedUdate()是固定时间调用，其时间通过Unity中Edit--Project Setting--Time修改
+    /// </summary>
+    void FixedUpdate() //Update() 
 	{		
 		UpdateBackgrounds();
-		UpdateObstacles();
+        
+        UpdateObstacles();
 
         CheckDogToJump();
 
         CheckCatchUp();
+
+        RemoveObstacleCombinationOutside();
+    }
+    
+
+    void InitObstacles()
+    {
+        ObstacleCombination newComb = GenNewCombination(DifficultyLevel.Low, new Vector3(Settings.WidthCamera, 0, 0), 2);        
     }
 
-
-	/// <summary>
-	/// 启动时即初始化背景。
-	/// </summary>
-	void InitBackgrounds()
+    /// <summary>
+    /// 初始化背景。
+    /// </summary>
+    void InitBackgrounds()
 	{
 		GameObject backMiddle = GameObject.Find("background") as GameObject;
 		Bounds backBounds = (backMiddle.transform.GetComponent<SpriteRenderer>()).bounds;
@@ -105,54 +146,7 @@ public class MainCameraController : MonoBehaviour {
 		
 		Debug.Log(string.Format("widthBackground: {0}  ",  widthBackground));		
 	}
-
-	/// <summary>
-	/// 启动时即初始化障碍物。
-	/// </summary>
-	void InitObstacles()
-	{
-		float xObstacle = 2.0f;
-		GameObject newObstacle = GenNewObstacle(xObstacle);
-	}
-
-	/// <summary>
-	/// 计算障碍物的y值
-	/// </summary>
-	/// <returns>The obstacle y.</returns>
-	/// <param name="obstacle">Obstacle.</param>
-	float CalObstacleY(SpriteRenderer obstacle)
-	{
-		float obstacleHeight = obstacle.bounds.size.y;
-		return yObstaclesBottom + obstacleHeight /2.0f;
-	}
-
-	/// <summary>
-	/// 生成新的障碍物，并根据x值放置
-	/// </summary>
-	/// <returns>The new obstacle.</returns>
-	/// <param name="xObstacle">X obstacle.</param>
-	GameObject GenNewObstacle(float xObstacle)
-	{
-		GameObject newObstacle = new GameObject();
-
-		SpriteRenderer spriteRenderer = newObstacle.AddComponent<SpriteRenderer>();
-		spriteRenderer.sortingLayerName = "obstacle";
-		int indexSprite = Random.Range(0, obstacleAvailableSprites.Count);		
-		Debug.Log(string.Format("indexSprite: {0}  ",  indexSprite));
-		spriteRenderer.sprite = obstacleAvailableSprites[indexSprite];
-
-		BoxCollider2D boxCollider2D = newObstacle.AddComponent<BoxCollider2D>();
-
-
-
-		float yObstacle = CalObstacleY(spriteRenderer);
-		newObstacle.transform.position = new Vector3(xObstacle, yObstacle, 0);
-
-		//
-		obstacles.Add(newObstacle);
-
-		return newObstacle;
-	}
+        
 	
 	/// <summary>
 	/// 更新背影。主要动态改变墙的位置。
@@ -191,56 +185,111 @@ public class MainCameraController : MonoBehaviour {
 		}
 		return false;
 	}
-
-	/// <summary>
-	/// 更新障碍物。
-	/// 注意，内部实现待完善
-	/// </summary>
-	void UpdateObstacles()
-	{
-        //简化，由于视角一直往右边移动，所以只判断最左边的墙是否超出可见范围。
-        //目前obstacles只是简单的只包含一个障碍物
-        int i =0;
-		{
-			Vector3 obstPos = obstacles[i].transform.position;
-			if(IsObstacleLeftOutside_X(obstacles[i]))
-			{
-				float rand = Random.Range(1f, 3f);
-				
-				Debug.Log(string.Format("rand: {0}  ",  rand));
-				float xNew = Camera.main.transform.position.x + widthCam / 2.0f * (rand  + 1.0f ); 
-
-				obstacles[i].transform.position = new Vector3(xNew, obstPos.y, obstPos.z);	
-
-
-				//注意，此处暂时简单更改spriteRender，但不确定会不会自己更新box collider 2d的bounds。待更细处理
-				int indexSprite = Random.Range(0, obstacleAvailableSprites.Count);		
-				Debug.Log(string.Format("indexSprite: {0}  ",  indexSprite));
-				obstacles[i].GetComponent<SpriteRenderer>().sprite = obstacleAvailableSprites[indexSprite];
-
-
-			}
-		}
-	}
+    
 
     /// <summary>
-    /// 判断障碍物是否移动到了屏幕左边之外了
+    /// 更新障碍物
     /// </summary>
-    /// <param name="obstacle"></param>
-    /// <returns></returns>
-	bool IsObstacleLeftOutside_X(GameObject obstacle)
-	{
-		Vector3 pos = obstacle.transform.position;
-		Vector3 posCam = Camera.main.transform.position;
-		float widthObstacle = obstacle.GetComponent<SpriteRenderer>().bounds.size.y;
-		
-		if(pos.x + widthObstacle/2.0f < posCam.x - widthCam / 2.0f )
-		{
-			return true;
-		}
-		return false;
-	}
+    void UpdateObstacles()
+    {
+        if (IsReadyToGenNewCombination())
+        {
+            DifficultyLevel diff = GenDifficultyLevel();
+            float x = Camera.main.transform.position.x + Settings.WidthCameraHalf + Random.value * 3;
+            float distanceFactor = 2;
 
+            ObstacleCombination newComb = GenNewCombination(diff, new Vector3(x, 0, 0), distanceFactor);
+        }
+    }
+
+    /// <summary>
+    /// 根据低、中、高难度的概率，生成难度级别
+    /// </summary>
+    /// <returns></returns>
+    DifficultyLevel GenDifficultyLevel()
+    {
+        float rand = Random.value;
+        Debug.Log(rand);
+        if (rand < probabilityLow)
+        {
+            return DifficultyLevel.Low;
+        }
+        else if (rand < probabilityLow + probabilityMedium)
+        {
+            return DifficultyLevel.Medium;
+        }
+        else
+        {
+            return DifficultyLevel.High;
+        }
+    }
+
+
+    bool IsReadyToGenNewCombination()
+    {
+        float xLastComb = lastCombination.GetPosition().x;
+        float xCamera = Camera.main.transform.position.x;
+
+        if (xCamera - xLastComb - lastCombination.Width + Settings.WidthCameraHalf > distanceEachCombination)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 创建新的障碍物组合；
+    /// 根据各参数从Settings.ObstacleCombinations中设置的已有组合中随机选取一个组合以生成障碍物。
+    /// </summary>
+    /// <param name="difficulty">游戏难度</param>
+    /// <param name="position">组合的位置，组合中障碍物的位置相对于组合的位置</param>
+    /// <param name="distanceFactor">各障碍物的距离因子</param>
+    /// <returns></returns>
+    ObstacleCombination GenNewCombination(DifficultyLevel difficulty, Vector3 position, float distanceFactor)
+    {
+        int indexCombination_Low = Random.Range(0, Settings.ObstacleCombinations[difficulty].Count);
+        ObstacleCombination newComb = Settings.ObstacleCombinations[difficulty][indexCombination_Low];
+        newComb.GenObstacles(distanceFactor);
+        newComb.SetPosition(position);
+
+        lastCombination = newComb;
+        obstacleCombinations.Add(newComb);
+
+        return newComb;
+    }
+
+    /// <summary>
+    /// 移除掉超出屏幕右边的障碍物
+    /// </summary>
+    void RemoveObstacleCombinationOutside()
+    {
+        int countCombs = obstacleCombinations.Count;
+
+        for(int i= 0; i < countCombs; i++)
+        {
+            ObstacleCombination comb = obstacleCombinations[i];
+
+            Vector3 posComb = comb.Position;
+            Vector3 posCam = Camera.main.transform.position;
+
+            //考虑到障碍物有一定宽度，暂且在最后加多一项-10
+            if (posComb.x + comb.Width < posCam.x - Settings.WidthCameraHalf - 10)
+            {
+                Debug.Log("comb.Width: " + comb.Width);
+                Debug.Log("destroy one ObstacleCombination Outside");
+                obstacleCombinations.RemoveAt(i);// (comb);
+                comb.Destory();
+                comb = null;
+
+                i--;
+                countCombs--;
+            }
+        }
+        
+    }
+
+    
     /// <summary>
     /// 判断狗是否需要起跳以躲避障碍
     /// </summary>

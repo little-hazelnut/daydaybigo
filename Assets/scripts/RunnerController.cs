@@ -6,7 +6,7 @@ public class RunnerController : MonoBehaviour {
 
 
 	public Sprite[] sprites;
-	public float framesPerSecond= 60;
+	public float framesPerSecond = 60;
 	private SpriteRenderer spriteRenderer;
 
 	/// <summary>
@@ -46,18 +46,21 @@ public class RunnerController : MonoBehaviour {
     /// runner在地面上的时候的y值,
     /// </summary>
     public static float yOnGround = -1.5f;
+    
 
 	// Use this for initialization
 	void Start () {
 		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
-		speedX = speedInitX;
-        
+		speedX = speedInitX;        
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
+
+    /// <summary>
+    /// 之前原为Update()
+    /// Update()是每帧画面更新时调用；FixedUdate()是固定时间调用，其时间通过Unity中Edit--Project Setting--Time修改
+    /// </summary>
+    void FixedUpdate() //Update() 
+    {
 		//检测是否有点击事件，并作相应处理；目前主要是处理起跳
 		if(Input.GetButton("Fire1"))
 		{
@@ -71,7 +74,6 @@ public class RunnerController : MonoBehaviour {
 
 		//更新位置
 		UpdatePosition();
-
 	}
 
 			  
@@ -82,11 +84,12 @@ public class RunnerController : MonoBehaviour {
 	/// </summary>
 	void ReadyToJump()
 	{
-		//如果已经是跳起状态，不作处理
-		if(isJumpping)
-		{
-			return;
-		}
+		//如果已经是跳起状态，不作处理；
+        //如果要连跳的话，注释此处
+		//if(isJumpping)
+		//{
+		//	return;
+		//}
 		
 		speedY = speedJumpUp;
 		isJumpping = true;
@@ -123,12 +126,15 @@ public class RunnerController : MonoBehaviour {
 
 		transform.position = new Vector3(x, y, 0f);
 
-		//让摄像机在水平方向
-//		Camera.main.transform.position = new Vector3(
-//			transform.position.x, 
-//			Camera.main.transform.position.y, 
-//			Camera.main.transform.position.z);
-	}
+        //让摄像机在水平方向
+        if (Settings.IsCameraFollowRunner)
+        {
+            Camera.main.transform.position = new Vector3(
+                transform.position.x,
+                Camera.main.transform.position.y,
+                Camera.main.transform.position.z);
+        }
+    }
 
 	/// <summary>
 	/// 计算runner的X坐标

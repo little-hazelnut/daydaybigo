@@ -47,8 +47,13 @@ public class DogController : MonoBehaviour {
 		speedX = speedInitX;
 
 	}
-	
-	void Update () {		
+
+    /// <summary>
+    /// 之前原为Update()
+    /// Update()是每帧画面更新时调用；FixedUdate()是固定时间调用，其时间通过Unity中Edit--Project Setting--Time修改
+    /// </summary>
+    void FixedUpdate() //Update()
+    {		
 		//更新sprite
 		int index = (int)(Time.timeSinceLevelLoad * framesPerSecond);
 		index = index % sprites.Length;
@@ -87,12 +92,15 @@ public class DogController : MonoBehaviour {
 		}
 		
 		transform.position = new Vector3(x, y, 0f);
-		
-		//让摄像机在水平方向
-		Camera.main.transform.position = new Vector3(
-			transform.position.x - 2.0f, 
-			Camera.main.transform.position.y, 
-			Camera.main.transform.position.z);
+
+        //让摄像机在水平方向
+        if (!Settings.IsCameraFollowRunner)
+        {
+            Camera.main.transform.position = new Vector3(
+            transform.position.x - 2.0f,
+            Camera.main.transform.position.y,
+            Camera.main.transform.position.z);
+        }
 	}
 	
 	/// <summary>
