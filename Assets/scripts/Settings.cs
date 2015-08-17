@@ -144,7 +144,7 @@ public static class Settings {
     }
 
     /// <summary>
-    /// 
+    /// 根据物体的高度计算其在计分栏（天花板）下的物体的Y值
     /// </summary>
     /// <param name="heightObject"></param>
     /// <returns></returns>
@@ -170,85 +170,299 @@ public static class Settings {
     private static void InitObstacleCombinations()
     {
         #region 初级难度的障碍物组合
-        List<ObstacleCombination> combs_Low = new List<ObstacleCombination>();
-
-        combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.B1 },
-            new List<float>() { 0 }
-            ));
-        combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.B2 },
-            new List<float>() { 0 }
-            ));
-        combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.B3 },
-            new List<float>() { 0 }
-            ));
-        combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.B4 },
-            new List<float>() { 0 }
-            ));
-         combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.T1 },
-            new List<float>() { 0 }
-            ));
-        combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.T2 },
-            new List<float>() { 0 }
-            ));
-        combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.T3 },
-            new List<float>() { 0 }
-            ));
-        combs_Low.Add(new ObstacleCombination(
-            DifficultyLevel.Low,
-            new List<ObstacleType>() { ObstacleType.T4 },
-            new List<float>() { 0 }
-            ));
+        List<ObstacleCombination> combs_Low = new List<ObstacleCombination>()
+        {
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.B1 },
+                new List<float>() { 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.B2 },
+                new List<float>() { 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.B3 },
+                new List<float>() { 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.B4 },
+                new List<float>() { 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.T1 },
+                new List<float>() { 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.T2 },
+                new List<float>() { 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.T3 },
+                new List<float>() { 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Low,
+                new List<ObstacleType>() { ObstacleType.T4 },
+                new List<float>() { 0 }
+            ),
+        };
         #endregion
 
 
         #region 中级难度的障碍物组合
-        List<ObstacleCombination> combs_Medium = new List<ObstacleCombination>();
+        List<ObstacleCombination> combs_Medium = new List<ObstacleCombination>()
+        {
+            new ObstacleCombination(
+                DifficultyLevel.Medium,
+                new List<ObstacleType>() { ObstacleType.B1, ObstacleType.T3 },
+                new List<float>() { 0, 1 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Medium,
+                new List<ObstacleType>() { ObstacleType.B2, ObstacleType.T2 },
+                new List<float>() { 0, 1 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Medium,
+                new List<ObstacleType>() { ObstacleType.B3, ObstacleType.T1 },
+                new List<float>() { 0, 1 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Medium,
+                new List<ObstacleType>() { ObstacleType.B2, ObstacleType.T4 },
+                new List<float>() { 0, 0 }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.Medium,
+                new List<ObstacleType>() { ObstacleType.B4, ObstacleType.T2 },
+                new List<float>() { 0, 0 }
+           )
+        };
 
-        combs_Medium.Add(new ObstacleCombination(
-            DifficultyLevel.Medium,
-            new List<ObstacleType>() { ObstacleType.B1, ObstacleType.T3 },
-            new List<float>() { 0, 1 }
-            ));
-        combs_Medium.Add(new ObstacleCombination(
-            DifficultyLevel.Medium,
-            new List<ObstacleType>() { ObstacleType.B2, ObstacleType.T2 },
-            new List<float>() { 0, 1 }
-            ));
-        combs_Medium.Add(new ObstacleCombination(
-            DifficultyLevel.Medium,
-            new List<ObstacleType>() { ObstacleType.B3, ObstacleType.T1 },
-            new List<float>() { 0, 1 }
-            ));
-        combs_Medium.Add(new ObstacleCombination(
-            DifficultyLevel.Medium,
-            new List<ObstacleType>() { ObstacleType.B2, ObstacleType.T4 },
-            new List<float>() { 0, 0 }
-            ));
-        combs_Medium.Add(new ObstacleCombination(
-           DifficultyLevel.Medium,
-           new List<ObstacleType>() { ObstacleType.B4, ObstacleType.T2 },
-           new List<float>() { 0, 0 }
-           ));
+
         #endregion
 
 
+        #region 中级难度的障碍物组合
+        List<ObstacleCombination> combs_High = new List<ObstacleCombination>()
+        {
+            //// 高级-1 /////
+            // 第一行
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.B2,
+                    ObstacleType.B2,
+                    ObstacleType.B1,
+                    ObstacleType.T4
+                },
+                new List<float>() {
+                    0,
+                    1,
+                    2,
+                    3,
+                    1.5f
+                }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B2,
+                    ObstacleType.T2,
+                    ObstacleType.B2
+                },
+                new List<float>() {
+                    0,
+                    1,
+                    2
+                }
+            ),
+            // 第二行
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B2,
+                    ObstacleType.T2,
+                    ObstacleType.B1,
+                    ObstacleType.T3,
+                },
+                new List<float>() {
+                    0,
+                    1,
+                    2,
+                    3
+                }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B3,
+                    ObstacleType.T1,
+                    ObstacleType.B1,
+                    ObstacleType.T3,
+                },
+                new List<float>() {
+                    0,
+                    1,
+                    2,
+                    3
+                }
+            ),
+            // 第三行， （第三行第一个与第二行第二个重复了）
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.T3,
+                    ObstacleType.B2,
+                    ObstacleType.T2,
+                },
+                new List<float>() {
+                    0,
+                    1,
+                    2.5f,
+                    3.5f
+                }
+            ),
+
+            //// 高级-2 /////
+            // 第一行
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.T3,
+                    ObstacleType.B3,
+                    ObstacleType.T1,
+                },
+                new List<float>() {
+                    0,
+                    1,
+                    3,
+                    4
+                }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B2,
+                    ObstacleType.T2,
+                    ObstacleType.B3,
+                    ObstacleType.T1,
+                },
+                new List<float>() {
+                    0,
+                    1,
+                    3,
+                    4
+                }
+            ),
+            // 第二行
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.B1,
+                    ObstacleType.T3,
+                },
+                new List<float>() {
+                    0,
+                    3,
+                    4
+                }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.B2,
+                    ObstacleType.T2,
+                },
+                new List<float>() {
+                    0,
+                    3,
+                    4
+                }
+            ),
+            //第三行
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.B3,
+                    ObstacleType.T1,
+                },
+                new List<float>() {
+                    0,
+                    3,
+                    4
+                }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.B2,
+                    ObstacleType.T4,
+                },
+                new List<float>() {
+                    0,
+                    3,
+                    3
+                }
+            ),
+
+            //// 高级-3 /////
+            // 第一行            
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.B4,
+                    ObstacleType.T2,
+                },
+                new List<float>() {
+                    0,
+                    3,
+                    3
+                }
+            ),
+            new ObstacleCombination(
+                DifficultyLevel.High,
+                new List<ObstacleType>() {
+                    ObstacleType.B1,
+                    ObstacleType.B1,
+                    ObstacleType.B2,
+                    ObstacleType.B2,
+                    ObstacleType.B1,
+                    ObstacleType.T4,
+                },
+                new List<float>() {
+                    0,
+                    3,
+                    4,
+                    5,
+                    6,
+                    4.5f
+                }
+            ),
+
+
+        };
+
+        #endregion
 
         ObstacleCombinations.Add(DifficultyLevel.Low, combs_Low);
         ObstacleCombinations.Add(DifficultyLevel.Medium, combs_Medium);
+        ObstacleCombinations.Add(DifficultyLevel.High, combs_High);
     }
 
 

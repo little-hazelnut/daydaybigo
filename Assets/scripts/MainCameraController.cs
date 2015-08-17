@@ -78,11 +78,11 @@ public class MainCameraController : MonoBehaviour {
     /// <summary>
     /// 中难度障碍物组合出现的概率
     /// </summary>
-    public float probabilityMedium = 0.5f;
+    public float probabilityMedium = 0.0f;
     /// <summary>
     /// 高难度障碍物组合出现的概率
     /// </summary>
-    public float probabilityHigh = 0.25f;
+    public float probabilityHigh = 0.5f;
 
 
 
@@ -196,7 +196,7 @@ public class MainCameraController : MonoBehaviour {
         {
             DifficultyLevel diff = GenDifficultyLevel();
             float x = Camera.main.transform.position.x + Settings.WidthCameraHalf + Random.value * 3;
-            float distanceFactor = 2;
+            float distanceFactor = 3;
 
             ObstacleCombination newComb = GenNewCombination(diff, new Vector3(x, 0, 0), distanceFactor);
         }
