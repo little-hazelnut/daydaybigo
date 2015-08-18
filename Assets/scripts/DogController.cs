@@ -35,11 +35,11 @@ public class DogController : MonoBehaviour {
 	/// runner是否处于跳起状态
 	/// </summary>
 	private bool isJumpping = false;
-	
-	/// <summary>
-	/// runner在地面上的时候的y值,
-	/// </summary>
-	private static float yOnGround = -2.0f;
+
+    /// <summary>
+    /// runner在地面上的时候的y值,
+    /// </summary>
+    private static float yOnGround = Settings.YDogOnFloor;//-2.0f;
     
 	void Start () {		
 		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;

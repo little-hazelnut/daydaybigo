@@ -52,10 +52,13 @@
      <Compile Include="Assets\scripts\MainCameraController.cs" />
      <Compile Include="Assets\scripts\ObstacleCombination.cs" />
      <Compile Include="Assets\scripts\ObstacleType.cs" />
+     <Compile Include="Assets\scripts\PauseControler.cs" />
      <Compile Include="Assets\scripts\RunnerAnimator.cs" />
      <Compile Include="Assets\scripts\RunnerController.cs" />
      <Compile Include="Assets\scripts\Settings.cs" />
+     <Compile Include="Assets\scripts\Start.cs" />
      <Compile Include="Assets\scripts\State.cs" />
+     <Compile Include="Assets\scripts\audioScript.cs" />
      <None Include="Assets\scripts\记录.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

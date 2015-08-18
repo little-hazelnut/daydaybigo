@@ -29,3 +29,11 @@ by Schelling 2015.08.16 22:40
 6. 在MainCameraController中有比较大的改动；
 7. 修改了各个Controller中有Update()函数为FixedUpdate()，实现以固定时间更新物体动作等，具体见注释说明。
 8. 人修改为连跳
+
+
+记录 by Schelling 2015.08.18  19:31
+8.17~18两日内容：
+1、17号晚开发四人三人整合功能，主要在原基本上整合了开始界面、场景切换、重力感应等；
+2、添加了天顶的box collider 2D，挡住人不飞到天上；修改背景图为720像素高，camera size相应改成3.6。
+
+ 

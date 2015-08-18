@@ -8,7 +8,7 @@ public class RunnerController : MonoBehaviour {
 	public Sprite[] sprites;
 	public float framesPerSecond = 60;
 	private SpriteRenderer spriteRenderer;
-
+	Animator anim;//ackhan:1
 	/// <summary>
 	/// runner在X方向上的初始速度
 	/// </summary>
@@ -45,11 +45,13 @@ public class RunnerController : MonoBehaviour {
     /// <summary>
     /// runner在地面上的时候的y值,
     /// </summary>
-    public static float yOnGround = -1.5f;
+    public static float yOnGround = Settings.YRunnerOnFloor;// -1.5f;
     
 
 	// Use this for initialization
 	void Start () {
+
+		anim = GetComponent<Animator> ();//ackhan:2
 		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
 		speedX = speedInitX;        
@@ -59,25 +61,32 @@ public class RunnerController : MonoBehaviour {
     /// 之前原为Update()
     /// Update()是每帧画面更新时调用；FixedUdate()是固定时间调用，其时间通过Unity中Edit--Project Setting--Time修改
     /// </summary>
-    void FixedUpdate() //Update() 
+	void FixedUpdate() //Update() 
     {
+		anim.SetFloat ("Vspeed", GetComponent<Rigidbody2D> ().velocity.y);//ackhan:5
 		//检测是否有点击事件，并作相应处理；目前主要是处理起跳
 		if(Input.GetButton("Fire1"))
 		{
+			anim.SetBool("Ground", false);//ackhan:3
 			ReadyToJump();
 		}
-
+		anim.SetBool("Ground", true);//ackhan:4
 		//更新sprite
 		int index = (int)(Time.timeSinceLevelLoad * framesPerSecond);
 		index = index % sprites.Length;
 		spriteRenderer.sprite = sprites[index];
 
+		// 根据重力感应的增加X方向速度
+		speedX = speedInitX + (Input.acceleration.x * 5);
+
 		//更新位置
 		UpdatePosition();
 	}
-
-			  
-
+	/*
+	void FixedUpdate () {
+		anim.SetFloat ("Vspeed", GetComponent<Rigidbody2D> ().velocity.y);//ackhan:5
+	}
+	*/
 
 	/// <summary>
 	/// 起跳处理
@@ -112,6 +121,7 @@ public class RunnerController : MonoBehaviour {
 		//如果正处于跳起状态,则需要重新计算y坐标
 		if(isJumpping)
 		{
+			anim.SetBool("Ground", false);//ackhan:6
 			y = CalculateY();
 
 			if(y <= yOnGround)
@@ -120,7 +130,7 @@ public class RunnerController : MonoBehaviour {
 				speedY = 0f;
 				isJumpping=false;
 
-				speedX += speedUpEachJump;
+			//	speedX += speedUpEachJump;
 			}
 		}
 
