@@ -24,5 +24,12 @@ public class State {
     /// </summary>
     public static int NumDogsCaught = 0;
 
-    
+    public static int updateNumDogsCaught() {
+        return ++NumDogsCaught;
+    }
+
+    public static int getNumDogsCaught()
+    {
+        return NumDogsCaught;
+    }
 }

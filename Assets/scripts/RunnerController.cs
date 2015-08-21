@@ -6,7 +6,7 @@ public class RunnerController : MonoBehaviour {
 
 
 	public Sprite[] sprites;
-	public float framesPerSecond = 60;
+	public float framesPerSecond = 15;
 	private SpriteRenderer spriteRenderer;
 	Animator anim;//ackhan:1
 	/// <summary>
@@ -68,7 +68,7 @@ public class RunnerController : MonoBehaviour {
 		if(Input.GetButton("Fire1"))
 		{
 			anim.SetBool("Ground", false);//ackhan:3
-			ReadyToJump();
+            ReadyToJump();
 		}
 		anim.SetBool("Ground", true);//ackhan:4
 		//更新sprite
@@ -93,14 +93,13 @@ public class RunnerController : MonoBehaviour {
 	/// </summary>
 	void ReadyToJump()
 	{
-		//如果已经是跳起状态，不作处理；
+        //如果已经是跳起状态，不作处理；
         //如果要连跳的话，注释此处
-		//if(isJumpping)
-		//{
-		//	return;
-		//}
-		
-		speedY = speedJumpUp;
+        //if(isJumpping)
+        //{
+        //	return;
+        //}
+        speedY = speedJumpUp;
 		isJumpping = true;
 	}
 
@@ -112,6 +111,10 @@ public class RunnerController : MonoBehaviour {
         if(State.IsCaughtUp)
         {
             //若处于追到狗的状态，暂时先停止跑，待交互处理
+            //加分----------
+            GameObject GO_canvas = GameObject.Find("Canvas");
+            GO_canvas.SendMessage("updateScore", null);
+            //----------
             return;
         }
 
@@ -132,6 +135,7 @@ public class RunnerController : MonoBehaviour {
 
 			//	speedX += speedUpEachJump;
 			}
+          
 		}
 
 		transform.position = new Vector3(x, y, 0f);
