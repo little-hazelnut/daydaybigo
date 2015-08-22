@@ -17,8 +17,11 @@ public static class Settings {
     /// </summary>
     static Settings()
     {
-        InitObstacleCombinations();
+        InitObstacleCombinations();     
     }
+    
+
+    private static float OrthoSizeCamera = Camera.main.orthographicSize;
 
     /// <summary>
     /// 摄像机是否跟随人；若否，则跟随狗
@@ -35,7 +38,8 @@ public static class Settings {
     {
         get
         {
-            return Camera.main.orthographicSize * 2;
+            //return Camera.main.orthographicSize * 2;
+            return OrthoSizeCamera * 2;
         }
     }
 
@@ -125,13 +129,14 @@ public static class Settings {
     /// <summary>
     /// 人在地面时的Y值
     /// </summary>
-    public static float YRunnerOnFloor { get { return GetYOnFloor(HeightRunner); } }
+    //public static float YRunnerOnFloor { get { return GetYOnFloor(HeightRunner); } }
+    public static float YRunnerOnFloor { get { return YFloor + HeightRunner / 2; } }
 
     /// <summary>
     /// 狗在地面时的Y值
     /// </summary>
-    public static float YDogOnFloor { get { return GetYOnFloor(HeightDog); } }
-
+    //public static float YDogOnFloor { get { return GetYOnFloor(HeightDog); } }
+    public static float YDogOnFloor { get { return YFloor + HeightDog / 2; } }
 
     /// <summary>
     /// 根据物体的高度计算其在地面上的物体的Y值

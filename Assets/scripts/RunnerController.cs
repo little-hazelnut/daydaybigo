@@ -46,12 +46,13 @@ public class RunnerController : MonoBehaviour {
     /// runner在地面上的时候的y值,
     /// </summary>
     public static float yOnGround = Settings.YRunnerOnFloor;// -1.5f;
-    
 
-	// Use this for initialization
-	void Start () {
 
-		anim = GetComponent<Animator> ();//ackhan:2
+    // Use this for initialization
+    //void Start () {		
+    void Awake()
+    {
+        anim = GetComponent<Animator> ();//ackhan:2
 		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
 		speedX = speedInitX;        
@@ -108,7 +109,7 @@ public class RunnerController : MonoBehaviour {
 	/// </summary>
 	void UpdatePosition()
 	{
-        if(State.IsCaughtUp)
+        if(State.RunnerState == RunnerState.CaughtUp)
         {
             //若处于追到狗的状态，暂时先停止跑，待交互处理
             //加分----------

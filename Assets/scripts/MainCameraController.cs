@@ -86,8 +86,9 @@ public class MainCameraController : MonoBehaviour {
 
 
 
-    void Start () {
-
+    ///void Start () {
+    void Awake() {
+                
         heightCam = Settings.HeightCamera;// 2.0f * Camera.main.orthographicSize;
         widthCam = Settings.WidthCamera;// heightCam * Camera.main.aspect;
 		//float backgroundWidth = 
@@ -332,13 +333,46 @@ public class MainCameraController : MonoBehaviour {
     }
 
     /// <summary>
-    /// 当人追上狗后的处理接口
+    /// 当人追上狗后的处理接口, 在此中添加人狗交互的过程(或者切换到交互场景等)；人狗交互结束后，需要调用OnEndedInteraction，State.RunnerState == RunnerState.SpeedingUp
     /// </summary>
     void OnCaughtUp()
     {
-        State.IsCaughtUp = true;
-                
+        State.RunnerState = RunnerState.CaughtUp;
+
         //do sth here...
+
+    }
+
+    /// <summary>
+    /// 当人狗交互结束后的处理接口，在此中切换状态；从0开始加速到正常速度；当加速完成后，调用OnEndedSpeedUp()
+    /// </summary>
+    void OnEndedInteraction()
+    {
+        State.RunnerState = RunnerState.SpeedingUp;
+
+        //do sth here...
+
+    }
+
+    /// <summary>
+    /// 当人加速到正常速度后的处理接口，此时人恢复到正常速度；此时需要在右边一定距离外(还不可见的地方)生成新的狗，调用OnEndedSearchDog()；人继续跑，直到看到狗的时候，狗开始跑，人开始追
+    /// </summary>
+    void OnEndedSpeedUp()
+    {
+        State.RunnerState = RunnerState.SearchingDog;
+        
+
+
+
+    }
+
+    /// <summary>
+    /// 当人看到新的狗时的处理接口，此时需要恢复到正常的追狗状态，循环整个过程。
+    /// </summary>
+    void OnEndedSearchDog()
+    {
+        State.RunnerState = RunnerState.Chasing;
+
 
     }
 

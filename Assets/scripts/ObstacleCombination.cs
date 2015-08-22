@@ -77,6 +77,14 @@ public class ObstacleCombination : UnityEngine.Object
     /// </summary>
     static ObstacleCombination()
     {
+        InitObstacleCombination();
+    }
+
+    public static void InitObstacleCombination()
+    {
+        ObstacleAvailableSprites = new Dictionary<ObstacleType, Sprite>();
+        ObstaclesYPosition = new Dictionary<ObstacleType, float>();
+
         //生成障碍物Sprite集合和Y值集合；由于对于每一个障碍物，这两者都是固定的，所以可以提前生前并作为静态变量供全局使用
         foreach (ObstacleType obstType in System.Enum.GetValues(typeof(ObstacleType)).Cast<ObstacleType>().ToList())
         {
@@ -88,7 +96,6 @@ public class ObstacleCombination : UnityEngine.Object
             //Y值集合
             ObstaclesYPosition.Add(obstType, CalObstaclesY(obstType));
         }
-
     }
 
     /// <summary>

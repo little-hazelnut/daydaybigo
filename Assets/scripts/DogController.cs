@@ -40,9 +40,11 @@ public class DogController : MonoBehaviour {
     /// runner在地面上的时候的y值,
     /// </summary>
     private static float yOnGround = Settings.YDogOnFloor;//-2.0f;
-    
-	void Start () {		
-		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
+
+    //void Start () {		
+    void Awake()
+    {
+        spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
 		speedX = speedInitX;
 
@@ -69,7 +71,7 @@ public class DogController : MonoBehaviour {
 	/// </summary>
 	void UpdatePosition()
     {
-        if (State.IsCaughtUp)
+        if (State.RunnerState == RunnerState.CaughtUp)
         {
             //若处于追到狗的状态，暂时先停止跑，待交互处理
             return;

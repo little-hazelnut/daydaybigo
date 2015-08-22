@@ -32,4 +32,33 @@ public class State {
     {
         return NumDogsCaught;
     }
+    
+
+    public static RunnerState RunnerState;
 }
+
+
+
+/// <summary>
+/// 人的状态枚举，对应不同状态，人和狗有
+/// </summary>
+public enum RunnerState
+{
+    /// <summary>
+    /// 正在追赶
+    /// </summary>
+    Chasing,
+    /// <summary>
+    /// 抓到狗
+    /// </summary>
+    CaughtUp,
+    /// <summary>
+    /// 抓到狗后再起速
+    /// </summary>          
+    SpeedingUp,
+    /// <summary>
+    /// 加速完后正常速度，还没有遇到狗；在遇到狗后，狗会开始跑，人会返回Chasing状态
+    /// </summary>
+    SearchingDog,
+}
+
