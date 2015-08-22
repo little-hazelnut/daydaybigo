@@ -12,12 +12,15 @@ public class RunnerController : MonoBehaviour {
 	/// <summary>
 	/// runner在X方向上的初始速度
 	/// </summary>
-	public float speedInitX = 5;
+	public float speedInitX
+    {
+        get { return Settings.SpeedNormal; }
+    }
 
-	/// <summary>
-	/// runner跳起时的向上初始速度
-	/// </summary>
-	public float speedJumpUp = 20f;
+    /// <summary>
+    /// runner跳起时的向上初始速度
+    /// </summary>
+    public float speedJumpUp = 20f;
 	/// <summary>
 	/// runner的重力加速度
 	/// </summary>
@@ -47,6 +50,14 @@ public class RunnerController : MonoBehaviour {
     /// </summary>
     public static float yOnGround = Settings.YRunnerOnFloor;// -1.5f;
 
+    /// <summary>
+    /// 手机的重力感应所产生的加速度因子，与Input.acceleration.x的乘积构成重力感应所产生的X方向加速度。
+    /// </summary>
+    public float mobileAccFactor = 5f;
+
+    private RunnerState runnerState { get { return State.RunnerState; } }
+
+    private GameObject mainCamera = null;
 
     // Use this for initialization
     //void Start () {		
@@ -55,7 +66,9 @@ public class RunnerController : MonoBehaviour {
         anim = GetComponent<Animator> ();//ackhan:2
 		spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
-		speedX = speedInitX;        
+        speedX = Settings.SpeedInit_Runner; //   
+
+        mainCamera = GameObject.Find("Main Camera");
 	}
 
     /// <summary>
@@ -66,7 +79,7 @@ public class RunnerController : MonoBehaviour {
     {
 		anim.SetFloat ("Vspeed", GetComponent<Rigidbody2D> ().velocity.y);//ackhan:5
 		//检测是否有点击事件，并作相应处理；目前主要是处理起跳
-		if(Input.GetButton("Fire1"))
+		if(Input.GetButtonDown("Fire1"))
 		{
 			anim.SetBool("Ground", false);//ackhan:3
             ReadyToJump();
@@ -77,17 +90,46 @@ public class RunnerController : MonoBehaviour {
 		index = index % sprites.Length;
 		spriteRenderer.sprite = sprites[index];
 
-		// 根据重力感应的增加X方向速度
-		speedX = speedInitX + (Input.acceleration.x * 5);
+        // 根据重力感应的增加X方向速度
+        UpdateSpeedX();
 
 		//更新位置
 		UpdatePosition();
 	}
-	/*
-	void FixedUpdate () {
-		anim.SetFloat ("Vspeed", GetComponent<Rigidbody2D> ().velocity.y);//ackhan:5
-	}
-	*/
+
+    void UpdateSpeedX()
+    {
+        switch (runnerState)
+        {
+            case RunnerState.SpeedingUp:
+                speedX += Time.fixedDeltaTime * Settings.AccSpeedUp_Runner + Input.acceleration.x * mobileAccFactor;
+
+                //加速完成，开始进入搜狗状态
+                if (speedX >= Settings.SpeedNormal)
+                {
+                    speedX = Settings.SpeedNormal;
+                    //触发Main Camera中的OnEndedSpeedUp()
+                    mainCamera.SendMessage("OnEndedSpeedUp");
+                }
+                break;
+
+            case RunnerState.SearchingDog:
+            case RunnerState.Chasing:
+                speedX = speedInitX + Input.acceleration.x * mobileAccFactor;
+
+                break;
+            case RunnerState.CaughtUp:
+                speedX = 0;
+                break;
+            default:
+                throw new System.Exception("状态不对，很不对");
+        }
+    }
+
+    void UpdatePosition_SpeedingUp()
+    {
+    }
+        
 
 	/// <summary>
 	/// 起跳处理
@@ -109,7 +151,7 @@ public class RunnerController : MonoBehaviour {
 	/// </summary>
 	void UpdatePosition()
 	{
-        if(State.RunnerState == RunnerState.CaughtUp)
+        if(runnerState == RunnerState.CaughtUp)
         {
             //若处于追到狗的状态，暂时先停止跑，待交互处理
             //加分----------
@@ -133,22 +175,11 @@ public class RunnerController : MonoBehaviour {
 				y=yOnGround;
 				speedY = 0f;
 				isJumpping=false;
-
-			//	speedX += speedUpEachJump;
 			}
           
 		}
 
 		transform.position = new Vector3(x, y, 0f);
-
-        //让摄像机在水平方向
-        if (Settings.IsCameraFollowRunner)
-        {
-            Camera.main.transform.position = new Vector3(
-                transform.position.x,
-                Camera.main.transform.position.y,
-                Camera.main.transform.position.z);
-        }
     }
 
 	/// <summary>
@@ -175,12 +206,17 @@ public class RunnerController : MonoBehaviour {
     /// <param name="collision"></param>
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(string.Format("on Runner Collider Collision ... "));
+        Debug.Log(string.Format("on Runner Collider Collision ... count "));
 
         //当碰撞时，暂时先是处理为速度恢复为初始速度；
         //待添加上重力感应功能后再另行处理
-        speedX = speedInitX;
+        //speedX = speedInitX;
 
+        //if()
+
+
+
+        
     }
     
 

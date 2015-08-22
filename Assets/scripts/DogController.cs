@@ -11,7 +11,10 @@ public class DogController : MonoBehaviour {
 	/// <summary>
 	/// runner在X方向上的初始速度
 	/// </summary>
-	public float speedInitX = 5;
+	public float speedInitX
+    {
+        get { return Settings.SpeedNormal; }
+    }
 	
 	/// <summary>
 	/// runner跳起时的向上初始速度
@@ -46,9 +49,9 @@ public class DogController : MonoBehaviour {
     {
         spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
 
-		speedX = speedInitX;
+        speedX =  Settings.SpeedInit_Dog;  // Settings.SpeedNormal; ;//
 
-	}
+    }
 
     /// <summary>
     /// 之前原为Update()
@@ -93,16 +96,7 @@ public class DogController : MonoBehaviour {
 			}
 		}
 		
-		transform.position = new Vector3(x, y, 0f);
-
-        //让摄像机在水平方向
-        if (!Settings.IsCameraFollowRunner)
-        {
-            Camera.main.transform.position = new Vector3(
-            transform.position.x - 2.0f,
-            Camera.main.transform.position.y,
-            Camera.main.transform.position.z);
-        }
+		transform.position = new Vector3(x, y, 0f);        
 	}
 	
 	/// <summary>
@@ -138,8 +132,13 @@ public class DogController : MonoBehaviour {
         isJumpping = true;
     }
 
-    
-
+    /// <summary>
+    /// 遇到人时的处理，如从慢走的速度恢复为正常速度，或汪一下之类
+    /// </summary>
+    void OnMeetRunner()
+    {
+        speedX = Settings.SpeedNormal;
+    }
 
 }
 

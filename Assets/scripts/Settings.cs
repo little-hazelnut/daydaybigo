@@ -28,6 +28,29 @@ public static class Settings {
     /// </summary>
     public static bool IsCameraFollowRunner = true;
 
+    /// <summary>
+    /// 人和狗在正常追跑时的速度
+    /// </summary>
+    public static float SpeedNormal = 10f;
+
+    /// <summary>
+    /// 加速时每次增加的速度量
+    /// </summary>
+    public static float SpeedAddition = 1f;
+
+    
+    public static float AccSpeedUp_Runner = 5f;
+
+    public static float AccSpeedUp_Dog = 5f;
+
+    public static float SpeedInit_Dog = 3f;
+
+    public static float SpeedInit_Runner = 0f;
+
+
+
+    public static float DistanceFromRightToMeetingDog = 3;
+
 
     #region 各对象高度、宽度等设置, 及相关函数
 

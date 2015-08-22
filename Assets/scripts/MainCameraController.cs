@@ -84,6 +84,9 @@ public class MainCameraController : MonoBehaviour {
     /// </summary>
     public float probabilityHigh = 0.5f;
 
+    private Vector3 posDog { get { return dog.transform.position; } }
+    private Vector3 posRunner { get { return runner.transform.position; } }
+    private Vector3 posCam { get { return this.transform.position; } }
 
 
     ///void Start () {
@@ -99,7 +102,12 @@ public class MainCameraController : MonoBehaviour {
 
         InitBackgrounds();
         
-        InitObstacles();
+        //InitObstacles();
+
+
+        State.RunnerState = RunnerState.SpeedingUp;
+
+        dog.SetActive(false);
     }
 
     /// <summary>
@@ -112,17 +120,48 @@ public class MainCameraController : MonoBehaviour {
         
         UpdateObstacles();
 
-        CheckDogToJump();
+        //CheckDogToJump();
 
-        CheckCatchUp();
+        if (State.RunnerState == RunnerState.SearchingDog)
+        {
+            CheckMeetingDog();
+        }
+
+        if (State.RunnerState == RunnerState.Chasing)
+        {
+            CheckCatchUp();
+        }
 
         RemoveObstacleCombinationOutside();
-    }
-    
 
+
+        //让摄像机在水平方向
+        Camera.main.transform.position = new Vector3(
+                Settings.IsCameraFollowRunner ? runner.transform.position.x + 4: dog.transform.position.x - 4,
+                Camera.main.transform.position.y,
+                Camera.main.transform.position.z);
+    }
+
+    /// <summary>
+    /// 判断是否见到狗了
+    /// </summary>
+    void CheckMeetingDog()
+    {
+        float distance = posDog.x - posCam.x;
+
+        if (distance < Settings.WidthCameraHalf - Settings.DistanceFromRightToMeetingDog)
+        {
+            OnEndedSearchDog();
+        }
+    }
+
+    /// <summary>
+    /// 初始化障碍物，只在人加速完后开始进入找狗状态时，才需要调用此函数。
+    /// </summary>
     void InitObstacles()
     {
-        ObstacleCombination newComb = GenNewCombination(DifficultyLevel.Low, new Vector3(Settings.WidthCamera, 0, 0), 2);        
+        float runnerX = runner.transform.position.x;
+        ObstacleCombination newComb = GenNewCombination(DifficultyLevel.Low, new Vector3(runnerX + Settings.WidthCamera, 0, 0), 2);        
     }
 
     /// <summary>
@@ -185,8 +224,7 @@ public class MainCameraController : MonoBehaviour {
 			return true;
 		}
 		return false;
-	}
-    
+	}    
 
     /// <summary>
     /// 更新障碍物
@@ -228,6 +266,18 @@ public class MainCameraController : MonoBehaviour {
 
     bool IsReadyToGenNewCombination()
     {
+        //当处于抓到狗或加速时，不需要生成新的障碍物
+        if(State.RunnerState == RunnerState.CaughtUp || State.RunnerState == RunnerState.SpeedingUp)
+        {
+            return false;
+        }
+
+        //if(lastCombination == null)
+        //{
+        //    InitObstacles();
+        //    return false;            
+        //}
+
         float xLastComb = lastCombination.GetPosition().x;
         float xCamera = Camera.main.transform.position.x;
 
@@ -289,31 +339,7 @@ public class MainCameraController : MonoBehaviour {
         }
         
     }
-
     
-    /// <summary>
-    /// 判断狗是否需要起跳以躲避障碍
-    /// </summary>
-    /// <returns></returns>
-    bool CheckDogToJump()
-    {
-        Vector3 posDog = dog.transform.position;
-
-        foreach (GameObject obstacle in obstacles)
-        {
-            Vector3 posObst = obstacle.transform.position;
-
-            if (posObst.x > posDog.x && posObst.x - posDog.x < distanceDogToJump)
-            {
-                dog.SendMessage("ReadyToJump");
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /// <summary>
     /// 判断是否人追上狗
     /// </summary>
@@ -321,16 +347,14 @@ public class MainCameraController : MonoBehaviour {
     {
         Vector3 posRunner = runner.transform.position;
         Vector3 posDog = dog.transform.position;
-
-        //Debug.Log(string.Format("posRunner: {0},{1} ", posRunner.x, posRunner.y, posRunner.z));
-
+        
         float distance = posDog.x - posRunner.x;
         if(distance < distanceCathUp)
         {
             Debug.Log(string.Format("Caught Up. Distance: {0}", distance));
             OnCaughtUp();
         }
-    }
+    }    
 
     /// <summary>
     /// 当人追上狗后的处理接口, 在此中添加人狗交互的过程(或者切换到交互场景等)；人狗交互结束后，需要调用OnEndedInteraction，State.RunnerState == RunnerState.SpeedingUp
@@ -338,6 +362,7 @@ public class MainCameraController : MonoBehaviour {
     void OnCaughtUp()
     {
         State.RunnerState = RunnerState.CaughtUp;
+        RemoveAllObstacleCombinations();
 
         //do sth here...
 
@@ -360,10 +385,15 @@ public class MainCameraController : MonoBehaviour {
     void OnEndedSpeedUp()
     {
         State.RunnerState = RunnerState.SearchingDog;
+        InitObstacles();
+
+        dog.transform.position = new Vector3(
+            runner.transform.position.x + Settings.WidthCamera * 1.5f,
+            dog.transform.position.y,
+            dog.transform.position.z
+            );
         
-
-
-
+        dog.SetActive(true);
     }
 
     /// <summary>
@@ -373,10 +403,25 @@ public class MainCameraController : MonoBehaviour {
     {
         State.RunnerState = RunnerState.Chasing;
 
-
+        dog.SendMessage("OnMeetRunner");
     }
 
 
+    /// <summary>
+    /// 清除所有障碍物组合，只有在抓到狗的时候才需要调用此函数。
+    /// </summary>
+    void RemoveAllObstacleCombinations()
+    {
+        for(int i=obstacleCombinations.Count - 1; i>-1;i--)
+        {
+            var comb = obstacleCombinations[i];
+            obstacleCombinations.RemoveAt(i);// (comb);
+            comb.Destory();
+            comb = null;
+        }
+
+        lastCombination = null;
+    }
 
 }
 
