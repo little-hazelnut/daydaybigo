@@ -354,7 +354,7 @@ public class MainCameraController : MonoBehaviour {
             Debug.Log(string.Format("Caught Up. Distance: {0}", distance));
             OnCaughtUp();
         }
-    }    
+    }
 
     /// <summary>
     /// 当人追上狗后的处理接口, 在此中添加人狗交互的过程(或者切换到交互场景等)；人狗交互结束后，需要调用OnEndedInteraction，State.RunnerState == RunnerState.SpeedingUp

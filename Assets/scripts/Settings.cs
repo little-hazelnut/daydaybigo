@@ -31,7 +31,7 @@ public static class Settings {
     /// <summary>
     /// 人和狗在正常追跑时的速度
     /// </summary>
-    public static float SpeedNormal = 10f;
+    public static float SpeedNormal = 8f;
 
     /// <summary>
     /// 加速时每次增加的速度量

@@ -37,3 +37,6 @@ by Schelling 2015.08.16 22:40
 2、添加了天顶的box collider 2D，挡住人不飞到天上；修改背景图为720像素高，camera size相应改成3.6。
 
  
+
+ by Schelling 2015.08.22 21:34  速度、加速度数值设置记录
+ 经测试，正常速度Speed Normal设置为8， 起跳速度Speend Jump Up设置为9， 重力加速度Gravity Acc设置为-25， 感觉较合适
