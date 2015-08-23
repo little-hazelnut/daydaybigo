@@ -10,6 +10,7 @@ public class StartScript : MonoBehaviour {
 
     public void OnStart()
 	{
-		Application.LoadLevel("sceneMain");
+		//Application.LoadLevel("sceneMain");
+		Application.LoadLevel("loading");
 	}
 }

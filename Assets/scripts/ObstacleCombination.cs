@@ -158,6 +158,7 @@ public class ObstacleCombination : UnityEngine.Object
     private GameObject GenObstacleObject(ObstacleType type)
     {
         GameObject newObstacle = new GameObject();
+        newObstacle.name = Settings.Text_Obstacle;
 
         SpriteRenderer spriteRenderer = newObstacle.AddComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = "obstacle";

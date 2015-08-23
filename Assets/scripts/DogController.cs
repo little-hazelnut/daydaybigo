@@ -13,7 +13,8 @@ public class DogController : MonoBehaviour {
 	/// </summary>
 	public float speedInitX
     {
-        get { return Settings.SpeedNormal; }
+       // get { return Settings.SpeedNormal; }
+		get {return 1;}
     }
 	
 	/// <summary>
@@ -137,7 +138,7 @@ public class DogController : MonoBehaviour {
     /// </summary>
     void OnMeetRunner()
     {
-        speedX = Settings.SpeedNormal;
+		speedX = speedInitX;// Settings.SpeedNormal;
     }
 
 }

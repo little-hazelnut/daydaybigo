@@ -31,7 +31,10 @@ public class PauseControler : MonoBehaviour {
 	
 	public void OnRestart()
 	{
-		Application.LoadLevel("sceneMain");
+		//Application.LoadLevel("sceneMain");
+
+		Application.LoadLevel("loading");
+		Time.timeScale = 1f;//乱改，原因不明
 		//---------Application.LoadLevelAsync("sceneMain");
 		//Application.LoadLevelAdditive ("sceneMain");
 	}

@@ -51,6 +51,7 @@ public static class Settings {
 
     public static float DistanceFromRightToMeetingDog = 3;
 
+    public static string Text_Obstacle = "obstacle";
 
     #region 各对象高度、宽度等设置, 及相关函数
 

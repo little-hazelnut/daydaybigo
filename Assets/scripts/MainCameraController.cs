@@ -365,7 +365,7 @@ public class MainCameraController : MonoBehaviour {
         RemoveAllObstacleCombinations();
 
         //do sth here...
-
+		runner.SendMessage ("bigoingStart");//函数名
     }
 
     /// <summary>
@@ -374,6 +374,8 @@ public class MainCameraController : MonoBehaviour {
     void OnEndedInteraction()
     {
         State.RunnerState = RunnerState.SpeedingUp;
+		dog.SetActive (false);
+
 
         //do sth here...
 

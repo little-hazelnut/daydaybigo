@@ -199,6 +199,7 @@ public class RunnerController : MonoBehaviour {
 		return transform.position.y + speedY * Time.deltaTime;
 	}
 
+
     /// <summary>
     /// 当人发生碰撞时的处理函数；
     /// 注意是OnCollisionEnter2D， 不是OnCollisionEnter；同时，参数是Collision2D，不是Collision
@@ -206,19 +207,43 @@ public class RunnerController : MonoBehaviour {
     /// <param name="collision"></param>
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(string.Format("on Runner Collider Collision ... count "));
+        Debug.Log(string.Format("on Runner Collider Collision ... count ") + collision.collider.tag + " " + collision.collider.name);
 
         //当碰撞时，暂时先是处理为速度恢复为初始速度；
         //待添加上重力感应功能后再另行处理
         //speedX = speedInitX;
 
-        //if()
+        if (collision.collider.name == Settings.Text_Obstacle)
+        {
+            OnCollisionToObstacle();
+        }
 
-
-
-        
     }
-    
+
+    /// <summary>
+    /// 当碰到障碍物时的处理接口，如减时间
+    /// </summary>
+    void OnCollisionToObstacle()
+    {
+
+    }
+
+    void bigoingStart(){
+		anim.SetBool("Bigo", true);
+		Invoke("bigoingEnd", 1.5f);//等待3s后结束bigo
+	}
+	
+	void bigoingEnd()
+	{
+		anim.SetBool("Bigo", false);
+		//Application.LoadLevelAsync ("sceneMain");
+		//Application.LoadLevel("sceneMain");//重新开始还是有问题
+
+
+		////
+		speedX = 0;
+		mainCamera.SendMessage ("OnEndedInteraction");
+	}
 
 
 }
