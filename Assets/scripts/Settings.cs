@@ -28,10 +28,20 @@ public static class Settings {
     /// </summary>
     public static bool IsCameraFollowRunner = true;
 
+    public static float SpeedBase = 5f;
+
+    public static float SpeedIncreasementEachCaughtUp = 0.05f;
+
     /// <summary>
     /// 人和狗在正常追跑时的速度
     /// </summary>
-    public static float SpeedNormal = 8f;
+    public static float SpeedNormal = 5f;
+
+    public static float IncreaseSpeedEachCaughtUp()
+    {
+        SpeedNormal = SpeedBase * (1 + SpeedIncreasementEachCaughtUp*State.NumDogsCaught);
+        return SpeedNormal;
+    }
 
     /// <summary>
     /// 加速时每次增加的速度量
@@ -39,9 +49,9 @@ public static class Settings {
     public static float SpeedAddition = 1f;
 
     
-    public static float AccSpeedUp_Runner = 5f;
+    public static float AccSpeedUp_Runner = 3f;
 
-    public static float AccSpeedUp_Dog = 5f;
+    public static float AccSpeedUp_Dog = 3f;
 
     public static float SpeedInit_Dog = 3f;
 
@@ -52,6 +62,10 @@ public static class Settings {
     public static float DistanceFromRightToMeetingDog = 3;
 
     public static string Text_Obstacle = "obstacle";
+
+    public static string Text_Dog = "dog";
+
+    public static string Text_Runner = "runner";
 
     #region 各对象高度、宽度等设置, 及相关函数
 

@@ -12,7 +12,15 @@ public class loading : MonoBehaviour {
 		ObstacleCombination.InitObstacleCombination();
 		//开始加载场景
 		StartCoroutine(LoadScene());
+
+        ResetData();
 	}
+
+    void ResetData()
+    {
+        State.ResetCountDown();
+        State.resetScore();
+    }
 	
 	//异步加载
 	IEnumerator LoadScene()

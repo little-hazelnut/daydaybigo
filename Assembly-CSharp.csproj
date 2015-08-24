@@ -50,6 +50,7 @@
      <Compile Include="Assets\scripts\DogAnimator.cs" />
      <Compile Include="Assets\scripts\DogController.cs" />
      <Compile Include="Assets\scripts\GameManager.cs" />
+     <Compile Include="Assets\scripts\GameoverScript.cs" />
      <Compile Include="Assets\scripts\MainCameraController.cs" />
      <Compile Include="Assets\scripts\ObstacleCombination.cs" />
      <Compile Include="Assets\scripts\ObstacleType.cs" />
@@ -61,6 +62,7 @@
      <Compile Include="Assets\scripts\State.cs" />
      <Compile Include="Assets\scripts\TimerManager.cs" />
      <Compile Include="Assets\scripts\audioScript.cs" />
+     <Compile Include="Assets\scripts\button_start.cs" />
      <Compile Include="Assets\scripts\loading.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

@@ -7,7 +7,14 @@ using System.Collections;
 /// 添加此类主要是方便统一控制
 /// </summary>
 public class State {
-
+    
+    public static void ResetData()
+    {
+        CountDown = initCountDown;
+        NumDogsCaught = 0;
+        Settings.SpeedNormal = Settings.SpeedBase;
+    }
+    
     /// <summary>
     /// 是否正在游戏；IsPlaying表示点击“开始游戏”后到“游戏结束”期间。
     /// 待定是否需要此变量
@@ -33,8 +40,74 @@ public class State {
         return NumDogsCaught;
     }
     
+    public static void resetScore(){
+        NumDogsCaught = 0;
+    }
+    
 
     public static RunnerState RunnerState;
+
+    private const float initCountDown = 300f;
+
+    /// <summary>
+    /// 倒计时，以秒为单位
+    /// </summary>
+    public static float CountDown = initCountDown;
+
+    /// <summary>
+    /// 每次减少的倒计时时间量，以秒为单位；
+    /// </summary>
+    private const float timeToCut_HitObstacle = 5f;
+    /// <summary>
+    /// 人追到狗后增加的倒计时时间量，以秒为单位
+    /// </summary>
+    private const float timeToAdd_CaughtUp = 8f;
+
+    public static float ResetCountDown()
+    {
+        CountDown = initCountDown;
+        return CountDown;
+    }
+
+    /// <summary>
+    /// 当碰到障碍物时执行减时操作
+    /// </summary>
+    /// <returns></returns>
+    public static float CutCountDown_HitObstacle()
+    {
+        return CutCountDown(timeToCut_HitObstacle);
+    }
+
+    /// <summary>
+    /// 通用减时操作
+    /// </summary>
+    /// <param name="timeToCut">减时量，以秒为单位</param>
+    /// <returns></returns>
+    public static float CutCountDown(float timeToCut)
+    {
+        CountDown -= timeToCut;
+        return CountDown;
+    }
+
+    /// <summary>
+    /// 通用的增时操作
+    /// </summary>
+    /// <param name="timeToAdd"></param>
+    /// <returns></returns>
+    public static float AddCountDown(float timeToAdd)
+    {
+        CountDown += timeToAdd;
+        return CountDown;
+    }
+
+    /// <summary>
+    /// 人追到狗后的增时操作
+    /// </summary>
+    /// <returns></returns>
+    public static float AddCountDown_CaughtUp()
+    {
+        return AddCountDown(timeToAdd_CaughtUp);
+    }
 }
 
 

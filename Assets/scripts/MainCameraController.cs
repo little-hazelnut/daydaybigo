@@ -74,15 +74,15 @@ public class MainCameraController : MonoBehaviour {
     /// <summary>
     /// 低难度障碍物组合出现的概率
     /// </summary>
-    public float probabilityLow = 0.5f;
+    public float probabilityLow = 0.4f;
     /// <summary>
     /// 中难度障碍物组合出现的概率
     /// </summary>
-    public float probabilityMedium = 0.0f;
+    public float probabilityMedium = 0.4f;
     /// <summary>
     /// 高难度障碍物组合出现的概率
     /// </summary>
-    public float probabilityHigh = 0.5f;
+    public float probabilityHigh = 0.2f;
 
     private Vector3 posDog { get { return dog.transform.position; } }
     private Vector3 posRunner { get { return runner.transform.position; } }
@@ -101,11 +101,14 @@ public class MainCameraController : MonoBehaviour {
         dog = GameObject.Find("dog");
 
         InitBackgrounds();
-        
+
         //InitObstacles();
 
+        GO_canvas = GameObject.Find("Canvas");
 
         State.RunnerState = RunnerState.SpeedingUp;
+
+        State.ResetData();
 
         dog.SetActive(false);
     }
@@ -115,22 +118,25 @@ public class MainCameraController : MonoBehaviour {
     /// Update()是每帧画面更新时调用；FixedUdate()是固定时间调用，其时间通过Unity中Edit--Project Setting--Time修改
     /// </summary>
     void FixedUpdate() //Update() 
-	{		
+	{
+        UpdataCoutDown();
+
 		UpdateBackgrounds();
         
         UpdateObstacles();
 
         //CheckDogToJump();
 
+        CheckDogPosition();
         if (State.RunnerState == RunnerState.SearchingDog)
         {
             CheckMeetingDog();
         }
 
-        if (State.RunnerState == RunnerState.Chasing)
-        {
-            CheckCatchUp();
-        }
+        //if (State.RunnerState == RunnerState.Chasing)
+        //{
+        //    CheckCatchUp();
+        //}
 
         RemoveObstacleCombinationOutside();
 
@@ -140,6 +146,41 @@ public class MainCameraController : MonoBehaviour {
                 Settings.IsCameraFollowRunner ? runner.transform.position.x + 4: dog.transform.position.x - 4,
                 Camera.main.transform.position.y,
                 Camera.main.transform.position.z);
+    }
+
+
+    GameObject GO_canvas = null;
+
+    /// <summary>
+    /// 更新倒计时，同时作结束判断
+    /// </summary>
+    void UpdataCoutDown()
+    {
+        //判断倒计时为0
+        if(State.RunnerState != RunnerState.CaughtUp)
+        {
+            if (State.CutCountDown(Time.fixedDeltaTime) <= 0)
+            {
+                //if(GO_canvas.activeInHierarchy)
+                GO_canvas.SendMessage("updateTime", 0);
+
+                OnGameOver();
+            }
+            else
+            {
+                //此处更新UI
+                GO_canvas.SendMessage("updateTime", string.Format("{0:0.00}", State.CountDown));
+            }
+
+        }
+    }
+
+    void CheckDogPosition()
+    {
+        if(posCam.x - posDog.x > Settings.WidthCameraHalf + 2)
+        {
+            ResetDog();
+        }
     }
 
     /// <summary>
@@ -360,12 +401,21 @@ public class MainCameraController : MonoBehaviour {
     /// 当人追上狗后的处理接口, 在此中添加人狗交互的过程(或者切换到交互场景等)；人狗交互结束后，需要调用OnEndedInteraction，State.RunnerState == RunnerState.SpeedingUp
     /// </summary>
     void OnCaughtUp()
-    {
+    {       
         State.RunnerState = RunnerState.CaughtUp;
-        RemoveAllObstacleCombinations();
+        
+        //加分----------
+        GameObject GO_canvas = GameObject.Find("Canvas");
+        GO_canvas.SendMessage("updateScore", null);
+
+        State.AddCountDown_CaughtUp();
+
+        //RemoveAllObstacleCombinations();
 
         //do sth here...
 		runner.SendMessage ("bigoingStart");//函数名
+
+        Settings.IncreaseSpeedEachCaughtUp();
     }
 
     /// <summary>
@@ -376,9 +426,7 @@ public class MainCameraController : MonoBehaviour {
         State.RunnerState = RunnerState.SpeedingUp;
 		dog.SetActive (false);
 
-
-        //do sth here...
-
+        RemoveAllObstacleCombinations();
     }
 
     /// <summary>
@@ -388,15 +436,17 @@ public class MainCameraController : MonoBehaviour {
     {
         State.RunnerState = RunnerState.SearchingDog;
         InitObstacles();
-
-        dog.transform.position = new Vector3(
-            runner.transform.position.x + Settings.WidthCamera * 1.5f,
-            dog.transform.position.y,
-            dog.transform.position.z
-            );
-        
+                
         dog.SetActive(true);
+        ResetDog();
     }
+
+    void ResetDog()
+    {
+        if(dog.activeInHierarchy)
+            dog.SendMessage("Reset", runner.transform.position.x + Settings.WidthCamera * 1.5f);
+    }
+
 
     /// <summary>
     /// 当人看到新的狗时的处理接口，此时需要恢复到正常的追狗状态，循环整个过程。
@@ -408,6 +458,13 @@ public class MainCameraController : MonoBehaviour {
         dog.SendMessage("OnMeetRunner");
     }
 
+    /// <summary>
+    /// 游戏结束时的接口；“游戏结束”不是指退出游戏，是指单局结束，如倒计时为0等情况。
+    /// </summary>
+    void OnGameOver()
+    {
+        Application.LoadLevel("Gameover");
+    }
 
     /// <summary>
     /// 清除所有障碍物组合，只有在抓到狗的时候才需要调用此函数。

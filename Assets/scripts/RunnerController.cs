@@ -8,10 +8,16 @@ public class RunnerController : MonoBehaviour {
 	public Sprite[] sprites;
 	public float framesPerSecond = 15;
 	private SpriteRenderer spriteRenderer;
+
 	Animator anim;//ackhan:1
 	/// <summary>
 	/// runner在X方向上的初始速度
 	/// </summary>
+	/// 
+	//音乐文件
+	public AudioSource music1;
+	public AudioSource music2;
+
 	public float speedInitX
     {
         get { return Settings.SpeedNormal; }
@@ -82,6 +88,12 @@ public class RunnerController : MonoBehaviour {
 		if(Input.GetButtonDown("Fire1"))
 		{
 			anim.SetBool("Ground", false);//ackhan:3
+
+			//跳起时添加音效
+			music1.volume = 1.0F;
+			
+			music1.Play();
+
             ReadyToJump();
 		}
 		anim.SetBool("Ground", true);//ackhan:4
@@ -102,7 +114,7 @@ public class RunnerController : MonoBehaviour {
         switch (runnerState)
         {
             case RunnerState.SpeedingUp:
-                speedX += Time.fixedDeltaTime * Settings.AccSpeedUp_Runner + Input.acceleration.x * mobileAccFactor;
+                speedX += Time.fixedDeltaTime * Settings.AccSpeedUp_Runner;// + Input.acceleration.x * mobileAccFactor;
 
                 //加速完成，开始进入搜狗状态
                 if (speedX >= Settings.SpeedNormal)
@@ -115,7 +127,8 @@ public class RunnerController : MonoBehaviour {
 
             case RunnerState.SearchingDog:
             case RunnerState.Chasing:
-                speedX = speedInitX + Input.acceleration.x * mobileAccFactor;
+                //speedX = speedInitX + Input.acceleration.x * mobileAccFactor;
+                speedX = speedInitX * (1 + Input.acceleration.x);
 
                 break;
             case RunnerState.CaughtUp:
@@ -154,10 +167,7 @@ public class RunnerController : MonoBehaviour {
         if(runnerState == RunnerState.CaughtUp)
         {
             //若处于追到狗的状态，暂时先停止跑，待交互处理
-            //加分----------
-            GameObject GO_canvas = GameObject.Find("Canvas");
-            GO_canvas.SendMessage("updateScore", null);
-            //----------
+
             return;
         }
 
@@ -218,6 +228,12 @@ public class RunnerController : MonoBehaviour {
             OnCollisionToObstacle();
         }
 
+        //碰撞的是狗，表示抓到狗了
+        if(collision.collider.name == Settings.Text_Dog)
+        {
+            mainCamera.SendMessage("OnCaughtUp");
+        }
+
     }
 
     /// <summary>
@@ -225,20 +241,26 @@ public class RunnerController : MonoBehaviour {
     /// </summary>
     void OnCollisionToObstacle()
     {
-
+        State.CutCountDown_HitObstacle();
     }
 
+	//抓到狗后的处理动作
     void bigoingStart(){
+
 		anim.SetBool("Bigo", true);
+
+		//跳起时添加音效
+	//	music1.volume = 0.0F;
+		music2.volume = 1.0F;
+		
+		music2.Play();
+
 		Invoke("bigoingEnd", 1.5f);//等待3s后结束bigo
 	}
 	
 	void bigoingEnd()
 	{
 		anim.SetBool("Bigo", false);
-		//Application.LoadLevelAsync ("sceneMain");
-		//Application.LoadLevel("sceneMain");//重新开始还是有问题
-
 
 		////
 		speedX = 0;

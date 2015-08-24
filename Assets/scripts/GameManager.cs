@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
         //string.Format("Bigo!:   <color=yellow>{0}</color>",score);
     }
 
-    void updateTime() {
-
+    void updateTime(string s) {
+        time_text.text = s;
     }
 }
 

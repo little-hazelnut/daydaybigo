@@ -6,11 +6,12 @@ public class audioScript : MonoBehaviour {
 	//音乐文件
 	public AudioSource music;
 	//音量
-	public float musicVolume;	
+	// public float musicVolume;	
+
 	
 	void Start() {
 		//设置默认音量
-		musicVolume = 0.5F;
+		music.volume = 0.3F;
 
 		music.Play();
 	}

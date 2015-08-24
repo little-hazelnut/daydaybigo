@@ -1,0 +1,132 @@
+fileFormatVersion: 2
+guid: 4eda9700334014346879c2dd765f19d3
+timeCreated: 1440315574
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: gameoverbg_0
+    21300002: gameoverbg_1
+    21300004: gameoverbg_2
+    21300006: gameoverbg_3
+    21300008: gameoverbg_4
+    21300010: gameoverbg_5
+    21300012: gameoverbg_6
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: gameoverbg_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 617
+        width: 298
+        height: 103
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gameoverbg_1
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 617
+        width: 727
+        height: 103
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gameoverbg_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 618
+        width: 256
+        height: 102
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gameoverbg_3
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 222
+        width: 500
+        height: 348
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gameoverbg_4
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 120
+        width: 260
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gameoverbg_5
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 123
+        width: 490
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gameoverbg_6
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 118
+        width: 258
+        height: 96
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

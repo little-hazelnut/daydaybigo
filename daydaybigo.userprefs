@@ -1,6 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\RunnerController.cs">
+    <Files>
+      <File FileName="Assets\scripts\StartScript.cs" Line="27" Column="21" />
+      <File FileName="Assets\scripts\PauseControler.cs" Line="15" Column="1" />
+      <File FileName="Assets\scripts\button_start.cs" Line="9" Column="2" />
+      <File FileName="Assets\scripts\loading.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\RunnerController.cs" Line="252" Column="4" />
+      <File FileName="Assets\scripts\audioScript.cs" Line="14" Column="21" />
+      <File FileName="Assets\scripts\MainCameraController.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

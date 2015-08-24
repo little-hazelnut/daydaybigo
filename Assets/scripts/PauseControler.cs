@@ -11,6 +11,7 @@ public class PauseControler : MonoBehaviour {
 	public Text  Dogs_value;//狗数显示
 	public int dogs = 0; 
 	//-----------数据显示1 end-------
+	
 
 	public void onPause()
 	{
@@ -31,12 +32,17 @@ public class PauseControler : MonoBehaviour {
 	
 	public void OnRestart()
 	{
-		//Application.LoadLevel("sceneMain");
+		Application.LoadLevel("sceneMain");
 
-		Application.LoadLevel("loading");
+		//Application.LoadLevel("loading");
 		Time.timeScale = 1f;//乱改，原因不明
 		//---------Application.LoadLevelAsync("sceneMain");
 		//Application.LoadLevelAdditive ("sceneMain");
+	}
+
+	public void OnMusic()
+	{
+		//music...
 	}
 
 }

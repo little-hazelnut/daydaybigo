@@ -13,8 +13,8 @@ public class DogController : MonoBehaviour {
 	/// </summary>
 	public float speedInitX
     {
-       // get { return Settings.SpeedNormal; }
-		get {return 1;}
+       get { return Settings.SpeedNormal; }
+		// get {return 1;}
     }
 	
 	/// <summary>
@@ -48,10 +48,18 @@ public class DogController : MonoBehaviour {
     //void Start () {		
     void Awake()
     {
-        spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;
+        spriteRenderer = GetComponent<Renderer>() as SpriteRenderer;        
+    }
 
-        speedX =  Settings.SpeedInit_Dog;  // Settings.SpeedNormal; ;//
+    void Reset(float xPos)
+    {
+        transform.position = new Vector3(
+            xPos, //runner.transform.position.x + Settings.WidthCamera * 1.5f,
+            transform.position.y,
+            transform.position.z
+            );
 
+        speedX = Settings.SpeedInit_Dog;
     }
 
     /// <summary>
